@@ -39,6 +39,61 @@ mkdir -p $HOME/LIVE_BOOT
 
 ---------- Начальная загрузка и настройка Debian (Bootstrap and Configure Debian)-----------------
 
+Установите базовую среду Debian. Я использую stretch для своего распределения и i386 для архитектуры. 
+Проконсультируйтесь с списком зеркал Debian.
 
+Пожалуйста, измените URL в этой команде, если есть зеркало, которое находится рядом с вами.
 
+sudo debootstrap \
+    --arch=i386 \
+    --variant=minbase \
+    stretch \
+    $HOME/LIVE_BOOT/chroot \
+    http://ftp.us.debian.org/debian/
+
+Chroot в среду Debian, которую мы только что загрузили.
+
+sudo chroot $HOME/LIVE_BOOT/chroot
+
+[Chroot] Установите пользовательское имя хоста для вашей среды Debian.
+
+echo "debian-live" > /etc/hostname
+
+[Chroot] Выясните, какое ядро ​​Linux вы хотите в живой среде.
+
+apt-cache search linux-image
+
+[Chroot] Я выбрал изображение Linux-Image-686. Я также считаю, что Live Boot-это необходимость. 
+Systemd-Sys (или эквивалент) также необходим для обеспечения init.
+
+apt-get update && \
+apt-get install --no-install-recommends \
+    linux-image-686 \
+    live-boot \
+    systemd-sysv
+
+[Chroot] Установите программы по выбору, а затем запустите Apt-Get Clear, чтобы сохранить немного места. 
+Я использую не-установленные, чтобы избежать лишних пакетов. Вы должны решить, что вам нужно для вашей среды.
+
+Прочитайте статью Debian по сокращению дефицита для советов по сокращению размера вашей среды Debian, 
+если размер важен, и вам нужна минимальная и компактная установка. Обратите внимание, что некоторые живые среды, 
+такие как Tiny Core Linux или Puppy Linux, специально оптимизируются для крошечного следа. 
+Хотя эта статья приводит к относительно крошечной живой среде, генерируя среду, которая составляет всего пару дюжин MB LAGH, 
+получает дополнительное образование в этой статье.
+
+apt-get install --no-install-recommends \
+    network-manager net-tools wireless-tools wpagui \
+    curl openssh-client \
+    blackbox xserver-xorg-core xserver-xorg xinit xterm \
+    nano && \
+apt-get clean
+
+[chroot] Установите пароль root. Root будет единственным пользователем в этой живой среде по умолчанию, 
+но вы можете добавить аддитивных пользователей по мере необходимости.
+
+passwd root
+
+[Chroot] Выйдите из Chroot.
+
+exit
 
