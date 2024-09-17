@@ -118,9 +118,39 @@ cp $HOME/LIVE_BOOT/chroot/boot/initrd.img-* \
 Создайте файл конфигурации меню для Grub. Обратите внимание, что в моем тестировании была необходима линия insmod all_video, 
 чтобы справиться с ошибкой в ​​загрузке UEFI для одной из моих машин. Возможно, не всем понадобится эта линия, но я сделал.
 
+Эти конфигурационные инструменты Grub , чтобы использовать команду поиска, чтобы вывести, какое устройство содержит нашу живую среду. 
+Этот SEMES, как и самое портативное решение, учитывает переменные способы, которыми мы можем написать нашу живую среду на загрузочный носитель.
 
+cat <<'EOF' >$HOME/LIVE_BOOT/scratch/grub.cfg
 
+insmod all_video
 
+search --set=root --file /DEBIAN_CUSTOM
+
+set default="0"
+set timeout=30
+
+menuentry "Debian Live" {
+    linux /vmlinuz boot=live quiet nomodeset
+    initrd /initrd
+}
+EOF
+
+Создайте специальный файл в image  с именем DEBIAN_CUSTOM. Этот файл будет использоваться, чтобы помочь Grub выяснить, 
+какое устройство содержит наше Live FilesItem. Это имя файла должно быть уникальным и должно соответствовать имени файла в нашей конфигурации Grub.cfg.
+
+touch $HOME/LIVE_BOOT/image/DEBIAN_CUSTOM
+
+Ваш каталог LIVE_BOOT теперь должен выглядеть примерно так.
+
+LIVE_BOOT/chroot/*tons of chroot files*
+LIVE_BOOT/scratch/grub.cfg
+LIVE_BOOT/image/DEBIAN_CUSTOM
+LIVE_BOOT/image/initrd
+LIVE_BOOT/image/vmlinuz
+LIVE_BOOT/image/live/filesystem.squashfs
+
+--------------- Создайте загрузочный среду (Create a bootable medium)------------------------------
 
 
 
