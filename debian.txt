@@ -97,3 +97,30 @@ passwd root
 
 exit
 
+Создайте каталоги, которые будут содержать файлы для наших файлов среды окружения и файлов scratch.
+
+mkdir -p $HOME/LIVE_BOOT/{scratch,image/live}
+
+Сжатие среды Chroot в файловую систему Squash.
+
+sudo mksquashfs \
+    $HOME/LIVE_BOOT/chroot \
+    $HOME/LIVE_BOOT/image/live/filesystem.squashfs \
+    -e boot
+
+Скопируйте ядро ​​и initramfs изнутри Chroot в живой каталог.
+
+cp $HOME/LIVE_BOOT/chroot/boot/vmlinuz-* \
+    $HOME/LIVE_BOOT/image/vmlinuz && \
+cp $HOME/LIVE_BOOT/chroot/boot/initrd.img-* \
+    $HOME/LIVE_BOOT/image/initrd
+
+Создайте файл конфигурации меню для Grub. Обратите внимание, что в моем тестировании была необходима линия insmod all_video, 
+чтобы справиться с ошибкой в ​​загрузке UEFI для одной из моих машин. Возможно, не всем понадобится эта линия, но я сделал.
+
+
+
+
+
+
+
