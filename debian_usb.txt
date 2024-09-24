@@ -24,3 +24,6 @@ sudo apt-get install \
 mkdir -p "${HOME}/LIVE_BOOT"
 
 -----------Bootstrap and Configure Debian---------------------
+Set up the base Debian environment. I am using stable for my distribution and amd64 for the architecture
+Consult the list of debian mirrors.    https://www.debian.org/mirror/list
+
