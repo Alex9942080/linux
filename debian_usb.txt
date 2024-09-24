@@ -56,5 +56,36 @@ apt-get install -y --no-install-recommends \
     systemd-sysv
 EOF
 
+# Прочитайте статью Debian по сокращению дефицита для советов по сокращению размера вашей среды Debian, если размер важен, 
+# и вам нужна минимальная и компактная установка. Обратите внимание, что некоторые живые среды, такие как Alpine Linux, 
+# Tiny Core Linux и Puppy Linux, специально оптимизированы для крошечного следа.
+# https://wiki.debian.org/ReduceDebian
+# https://alpinelinux.org/
+# https://en.wikipedia.org/wiki/Tiny_Core_Linux
+# https://en.wikipedia.org/wiki/Puppy_Linux
+
+# Хотя эта статья приводит к относительно крошечной живой среде, генерируя среду, которая составляет всего пару дюжин MB LAGH, 
+# получает дополнительное образование в этой статье.
+
+# Установите программы по выбору, а затем запустите apt-get clean
+# Чтобы сохранить немного места. Я использую --no-install-recommends
+# Чтобы избежать лишних пакетов. Вы должны решить, что вам нужно для вашей среды.
+
+sudo chroot "${HOME}/LIVE_BOOT/chroot" << EOF
+apt-get install -y --no-install-recommends \
+    iwd \
+    curl openssh-client \
+    openbox xserver-xorg-core xserver-xorg xinit xterm \
+    nano
+EOF
+
+# Установите пароль root. Root будет единственным пользователем в этой живой среде по умолчанию, 
+# но вы можете добавить аддитивных пользователей по мере необходимости.
+
+sudo chroot "${HOME}/LIVE_BOOT/chroot" passwd root
+
+
+
+
 
 
